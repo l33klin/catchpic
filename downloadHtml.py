@@ -1,4 +1,5 @@
 __author__ = 'klin'
+# -*- coding: utf-8 -*-
 
 # edit at 2015-04-10
 # Download html
@@ -6,24 +7,37 @@ __author__ = 'klin'
 #
 
 import constants
+import parser
 
 import urllib
 import urllib2
-import urlparse
 import hashlib
+import cookielib
+import os
 
 
-# function: download url
+# function: download url and create folder to save resource file
 #
 #
-def download(url, path):
+def downloadHtml(urlSuf, path):
 
-    response = urllib2.urlopen(url)
+    if not urlSuf.startswith('/'):
+        urlSuf = '/' + urlSuf
+
+    # down load url
+    url = constants.HOST + urlSuf
+    print 'url: %s' % url
+    cookieJ = cookielib.LWPCookieJar()
+    opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJ))
+    urllib2.install_opener(opener)
+    req = urllib2.Request(url)
+    response = opener.open(req)
     html = response.read()
-    print html
+    #print html
 
+    # write html file to local
     fileName = ''
-    if url.split('/')[-1].endswith('.html'):
+    if url.endswith('.html'):
         fileName = url.split('/')[-1]
     else:
         fileName = hashlib.md5(html.encode('utf-8')).hexdigest() + '.html'
@@ -31,7 +45,10 @@ def download(url, path):
     htmlFile.write(html)
     htmlFile.close()
 
-    return True
+    # create folder
+    os.mkdir(path + '/' + fileName.split('.')[0])
+
+    return fileName
 
 
 # test function
@@ -39,11 +56,13 @@ def download(url, path):
 #
 def test():
 
-    url = "http://cl.44kan.info/htm_data/7/1504/1447785.html"
-    download(url, constants.LOCALPATH)
+    url = "/htm_data/7/1504/1447785.html"
+    fileName = download(url, constants.LOCALPATH)
+    # parser.parseClHtml(fileName, constants.LOCALPATH)
+
+    print 'test complete!'
 
     return True
-
 
 if __name__ == '__main__':
     test()
