@@ -57,7 +57,7 @@ def downloadHtml(urlSuf, path):
 def test():
 
     url = "/htm_data/7/1504/1447785.html"
-    fileName = download(url, constants.LOCALPATH)
+    fileName = downloadHtml(url, constants.LOCALPATH)
     # parser.parseClHtml(fileName, constants.LOCALPATH)
 
     print 'test complete!'

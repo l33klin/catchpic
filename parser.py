@@ -9,11 +9,23 @@ from downloadPic import downloadPic
 #
 #
 #
-def parsePostsBody(body):
+def parsePostsBody(body, resPath):
     print 'starting parse posts body...'
-    
 
-    return True
+    bodyAfterReplace = body
+    startIndex = body.find('<img src=')
+    while startIndex != -1:
+        endIndex = body[startIndex + 10:].find('\'')
+        picUrl = body[startIndex + 10: startIndex + 10 + endIndex]
+        print picUrl
+        picLocal = downloadPic(picUrl, resPath)
+        print 'Replace %s as %s' % (picUrl, picLocal)
+        bodyAfterReplace = bodyAfterReplace.replace(picUrl, picLocal)
+
+        startIndex = body.find('<img src=', startIndex + 1)
+
+    print 'Replaced body: %s' % bodyAfterReplace
+    return bodyAfterReplace
 
 # parse caoliu Html
 #
@@ -23,6 +35,7 @@ def parseClHtml(htmlFileName, path):
     title = ''
     titlePre = ''
     postsBodyStart = -1
+    replacedHtml = ''
 
     fileP = open(path + '/' + htmlFileName, 'r')
     print 'starting parse Html: %s' % (path + '/' + htmlFileName)
@@ -32,23 +45,32 @@ def parseClHtml(htmlFileName, path):
             title = line[7:-9]
             titlePre = title[:-36]
             print 'get title : ' + title.decode('GBK')
+            if constants.SIMPLIFY:
+                replacedHtml += line
             # print titlePre.decode('GBK')
         elif line.startswith('<h4>'):
             if line.__contains__(titlePre):
                 postsBodyStart = 4
                 print line[4:-6].decode('GBK')
+                if constants.SIMPLIFY:
+                    replacedHtml += line
         # elif line.
 
         if postsBodyStart == 0:
             print 'Body: %s' % line.decode('GBK')
-            parsePostsBody(line)
+            resPath = path + '/' + htmlFileName.split('.')[0]
+            line = parsePostsBody(line, resPath)
+            if constants.SIMPLIFY:
+                replacedHtml += line
 
         postsBodyStart -= 1
+        if not constants.SIMPLIFY:
+            replacedHtml += line
         line = fileP.readline()
 
     fileP.close()
 
-    return True
+    return replacedHtml
 
 
 # test parse function
@@ -57,7 +79,11 @@ def parseClHtml(htmlFileName, path):
 def testParse():
 
     fileName = '1447785.html'
-    parseClHtml(fileName, constants.LOCALPATH)
+    replacedHtml = parseClHtml(fileName, constants.LOCALPATH)
+
+    htmlFile = open(constants.LOCALPATH + '/' + fileName, 'w')
+    htmlFile.write(replacedHtml)
+    htmlFile.close()
 
 if __name__ == '__main__':
     testParse()

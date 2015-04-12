@@ -8,3 +8,4 @@ __author__ = 'klin'
 
 HOST = "http://cl.44kan.info"
 LOCALPATH = "/Users/klin/Code/Python/testDownload"
+SIMPLIFY = True
