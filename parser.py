@@ -24,7 +24,7 @@ def parsePostsBody(body, resPath):
 
         startIndex = body.find('<img src=', startIndex + 1)
 
-    print 'Replaced body: %s' % bodyAfterReplace
+    # print 'Replaced body: %s' % bodyAfterReplace
     return bodyAfterReplace
 
 # parse caoliu Html
@@ -57,7 +57,7 @@ def parseClHtml(htmlFileName, path):
         # elif line.
 
         if postsBodyStart == 0:
-            print 'Body: %s' % line.decode('GBK')
+            # print 'Body: %s' % line.decode('GBK')
             resPath = path + '/' + htmlFileName.split('.')[0]
             line = parsePostsBody(line, resPath)
             if constants.SIMPLIFY:
@@ -70,7 +70,12 @@ def parseClHtml(htmlFileName, path):
 
     fileP.close()
 
-    return replacedHtml
+    fileP = open(path + '/' + htmlFileName, 'w')
+    fileP.write(replacedHtml)
+    fileP.close()
+
+    print 'rewrite html complete'
+    return True
 
 
 # test parse function
@@ -79,11 +84,7 @@ def parseClHtml(htmlFileName, path):
 def testParse():
 
     fileName = '1447785.html'
-    replacedHtml = parseClHtml(fileName, constants.LOCALPATH)
-
-    htmlFile = open(constants.LOCALPATH + '/' + fileName, 'w')
-    htmlFile.write(replacedHtml)
-    htmlFile.close()
+    parseClHtml(fileName, constants.LOCALPATH)
 
 if __name__ == '__main__':
     testParse()

@@ -14,6 +14,24 @@ import urllib2
 import hashlib
 import cookielib
 import os
+import sys
+import getopt
+
+# get complete url
+#
+#
+def getCompleteUrl(incompleteUrl):
+
+    completeUrl = ''
+
+    if incompleteUrl.startswith('http://'):
+        return incompleteUrl
+    else:
+        if not incompleteUrl.startswith('/'):
+            incompleteUrl = '/' + incompleteUrl
+
+    completeUrl = constants.HOST + incompleteUrl
+    return completeUrl
 
 
 # function: download url and create folder to save resource file
@@ -21,11 +39,8 @@ import os
 #
 def downloadHtml(urlSuf, path):
 
-    if not urlSuf.startswith('/'):
-        urlSuf = '/' + urlSuf
-
     # down load url
-    url = constants.HOST + urlSuf
+    url = getCompleteUrl(urlSuf)
     print 'url: %s' % url
     cookieJ = cookielib.LWPCookieJar()
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookieJ))
@@ -51,18 +66,45 @@ def downloadHtml(urlSuf, path):
     return fileName
 
 
+#
+#
+#
+def parseOpt():
+    opts, args = getopt.getopt(sys.argv[1:], "u:p:h", ["url=",  "path=", 'help'])
+
+    url = ''
+    path = ''
+    for a, o in opts:
+        if a in ('-u', '--url'):
+            url = o
+        elif a in ('-p', '--path'):
+            path = o
+        elif a in ('-h', '--help'):
+            print 'u(url): url to download;'
+            print 'p(path): path to store html file;'
+            print 'h(help): just help.'
+
+    return url, path
+
 # test function
 #
 #
-def test():
+def main(url, path):
 
-    url = "/htm_data/7/1504/1447785.html"
-    fileName = downloadHtml(url, constants.LOCALPATH)
-    # parser.parseClHtml(fileName, constants.LOCALPATH)
+    if url == '':
+        print 'No URL!!!'
+        return False
+
+    if path == '':
+        path = constants.LOCALPATH
+
+    fileName = downloadHtml(url, path)
+    parser.parseClHtml(fileName, constants.LOCALPATH)
 
     print 'test complete!'
 
     return True
 
 if __name__ == '__main__':
-    test()
+    url, path = parseOpt()
+    main(url, path)
