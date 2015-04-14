@@ -61,7 +61,7 @@ def downloadHtml(urlSuf, path):
     htmlFile.close()
 
     # create folder
-    if not os.exists(path + '/' + fileName.split('.')[0]):
+    if not os.path.exists(path + '/' + fileName.split('.')[0]):
         os.mkdir(path + '/' + fileName.split('.')[0])
 
     return fileName
