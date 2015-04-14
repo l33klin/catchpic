@@ -21,7 +21,7 @@ def downloadPic(picUrl, resPath):
                       'Connection': 'close',
                       'Referer': None  # if can't work replace this as url Host
                       }
-        req_timeout = 5
+        req_timeout = 20
         req = urllib2.Request(picUrl, None, req_header)
         response = urllib2.urlopen(req, None, req_timeout)
         pic = response.read()

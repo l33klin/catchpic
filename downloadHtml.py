@@ -49,7 +49,7 @@ def downloadHtml(urlSuf, path):
                   'Connection': 'close',
                   'Referer': None  # if can't work replace this as url Host
                   }
-    req_timeout = 5
+    req_timeout = 10
     req = urllib2.Request(url, None, req_header)
     response = urllib2.urlopen(req, None, req_timeout)
     html = response.read()
