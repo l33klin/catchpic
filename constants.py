@@ -9,3 +9,11 @@ __author__ = 'klin'
 HOST = "http://cl.44kan.info"
 LOCALPATH = "/Users/klin/Code/Python/testDownload"
 SIMPLIFY = True
+
+# MySQL info
+MYSQLHOST = '192.168.199.20'
+MYSQLPORT = ''
+MYSQLUSER = 'catcher'
+MYSQLPASS = 'iamcatcherhaha'
+MYSQLDB = 'catchpic'
+MYSQLCHARSET = 'utf-8'
