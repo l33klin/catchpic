@@ -4,6 +4,7 @@ __author__ = 'klin'
 import constants
 import htmlClass
 from downloadPic import downloadPic
+import DBConnector
 
 
 #
@@ -36,6 +37,7 @@ def parseClHtml(htmlFileName, path):
     titlePre = ''
     postsBodyStart = -1
     replacedHtml = ''
+    db = DBConnector.DBconnector()
 
     fileP = open(path + '/' + htmlFileName, 'r')
     print 'starting parse Html: %s' % (path + '/' + htmlFileName)

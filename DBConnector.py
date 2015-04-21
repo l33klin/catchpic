@@ -16,8 +16,8 @@ class DBconnector:
     def __init__(self):
 
         self.conn = MySQLdb.connect(host=constants.MYSQLHOST, user=constants.MYSQLUSER, passwd=constants.MYSQLPASS,
-                                    db=constants.MYSQLDB, charset=constants.MYSQLCHARSET)
-        self.cursor = self.conn.cursor
+                                    db=constants.MYSQLDB)
+        self.cursor = self.conn.cursor(MySQLdb.cursors.DictCursor)
 
         print 'DB connector initial complete'
 
@@ -35,5 +35,27 @@ class DBconnector:
     def insert(self, sql='', para=''):
 
         self.cursor.execute(sql, para)
+        self.conn.commit()
 
         return True
+
+    def insertPageInfo(self, title='', m_type='', level=0, favor=0):
+
+        self.cursor.execute('use %s' % constants.MYSQLDB)
+        sqlCmd = 'insert into %s values(100, %%s, %%s, %%s, %%s)' % constants.PAGETABLE
+        print sqlCmd
+        values = [title, m_type, level, favor]
+        self.insert(sqlCmd, values)
+
+        return True
+
+def test():
+
+    db = DBconnector()
+
+    db.insertPageInfo('test title', 'ZS', 2, 1)
+
+    return True
+
+if __name__ == '__main__':
+    test()

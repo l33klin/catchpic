@@ -17,3 +17,5 @@ MYSQLUSER = 'catcher'
 MYSQLPASS = 'iamcatcherhaha'
 MYSQLDB = 'catchpic'
 MYSQLCHARSET = 'utf-8'
+
+PAGETABLE = 'pages'
