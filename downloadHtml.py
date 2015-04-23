@@ -100,7 +100,7 @@ def main(url, path):
         path = constants.LOCALPATH
 
     fileName = downloadHtml(url, path)
-    parser.parseClHtml(fileName, constants.LOCALPATH)
+    #parser.parseClHtml(fileName, constants.LOCALPATH)
 
     print 'test complete!'
 

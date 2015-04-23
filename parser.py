@@ -6,6 +6,12 @@ import htmlClass
 from downloadPic import downloadPic
 import DBConnector
 
+from BeautifulSoup import BeautifulSoup
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 
 #
 #
@@ -80,13 +86,33 @@ def parseClHtml(htmlFileName, path):
     return True
 
 
+#
+#
+#
+def parseClHtmlUseBS(htmlFileName, path):
+
+    fp = open(path + '/' + htmlFileName, 'r')
+    html = fp.read()
+    fp.close()
+
+    soup = BeautifulSoup(html.decode('gbk', 'ignore'))
+    tableList = soup.findAll('table')
+
+    print 'There are %s tables...' % len(tableList)
+    print tableList[5].text
+
+    title = soup.title
+    print 'title: ', title.text
+
 # test parse function
 #
 #
 def testParse():
 
-    fileName = '1447785.html'
-    parseClHtml(fileName, constants.LOCALPATH)
+    fileName = '1460563.html'
+    parseClHtmlUseBS(fileName, constants.LOCALPATH)
 
 if __name__ == '__main__':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
     testParse()
