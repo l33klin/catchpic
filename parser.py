@@ -96,12 +96,21 @@ def parseClHtmlUseBS(htmlFileName, path):
     fp.close()
 
     soup = BeautifulSoup(html.decode('gbk', 'ignore'))
+    print 'type(soup): ', type(soup)
     tableList = soup.findAll('table')
 
     print 'There are %s tables...' % len(tableList)
-    print tableList[5].text
+    mainTable = tableList[5]
+    imgList = mainTable.findAll('img')
+    print 'There are %s images...' % len(imgList)
+    if not imgList:
+        imgList = mainTable.findAll(type='image')
+
+    for img in imgList:
+        print dict(img.attrs)['src']
 
     title = soup.title
+    print 'type(title): ', type(title)
     print 'title: ', title.text
 
 # test parse function
@@ -113,6 +122,6 @@ def testParse():
     parseClHtmlUseBS(fileName, constants.LOCALPATH)
 
 if __name__ == '__main__':
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+    #reload(sys)
+    #sys.setdefaultencoding('utf-8')
     testParse()
